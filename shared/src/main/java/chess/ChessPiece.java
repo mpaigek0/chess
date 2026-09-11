@@ -9,8 +9,8 @@ import java.util.Collection;
  * signature of the existing methods.
  */
 public class ChessPiece {
-
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type) {
+
     }
 
     /**
@@ -29,7 +29,8 @@ public class ChessPiece {
      * @return Which team this chess piece belongs to
      */
     public ChessGame.TeamColor getTeamColor() {
-        throw new RuntimeException("Not implemented");
+
+
     }
 
     /**
