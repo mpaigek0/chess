@@ -70,16 +70,21 @@ public class ChessPiece {
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> moves = new ArrayList<>(); // make an array list to fill with each piece's possible moves
         PieceType type = getPieceType();
+
+        // find out the piece's type and it's possible moves
         if (type == PieceType.BISHOP){
             // bishop can move in the 4 diagonals from where he currently is.
-
-            return; // NEED TO IMPLEMENT
+            int[][] bishop_directs = {{1,1}, {1, -1}, {-1,1}, {-1,-1}};
         }
         else if (type == PieceType.ROOK){
+            // rook can move up, down, left, or right. (row,col)
+            int[][] rook_directs = {{1,0}, {-1, 0}, {0,-1}, {0,1}};
 
         }
 
         else if (type == PieceType.QUEEN){
+            // queen moves in a combination of what rook and bishop do
+            int[][] queen_directs = {{1,1}, {1, -1}, {-1,1}, {-1,-1}, {1,0}, {-1, 0}, {0,-1}, {0,1}};
 
         }
         else if (type == PieceType.KNIGHT){
@@ -92,6 +97,6 @@ public class ChessPiece {
         else if (type == PieceType.PAWN){
 
         }
-        return; // NEED TO IMPLEMENT
+        return moves; // return the moves available for the piece to take
     }
 }
