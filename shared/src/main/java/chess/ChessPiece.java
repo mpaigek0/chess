@@ -67,6 +67,18 @@ public class ChessPiece {
      *
      * @return Collection of valid moves
      */
+    // check that the sliding moves for bishop, rook, & queen are valid
+    private Collection<ChessMove> slideSquares(ChessBoard board, ChessPosition myPosition, int[][] directions){
+        Collection<ChessMove> moves = new ArrayList<>();
+        ChessGame.TeamColor piece_clr = getTeamColor();
+        return moves; // not correct rn
+
+
+    }
+
+
+
+    // FUNCTION GIVEN TO US:
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> moves = new ArrayList<>(); // make an array list to fill with each piece's possible moves
         PieceType type = getPieceType();
@@ -75,6 +87,8 @@ public class ChessPiece {
         if (type == PieceType.BISHOP){
             // bishop can move in the 4 diagonals from where he currently is.
             int[][] bishop_directs = {{1,1}, {1, -1}, {-1,1}, {-1,-1}};
+            // make a loop for checking if the spot is off the board, if there's already another piece there
+            // (if it's one of your own pieces, you can't get there. If it's other team then you can capture it)
         }
         else if (type == PieceType.ROOK){
             // rook can move up, down, left, or right. (row,col)
