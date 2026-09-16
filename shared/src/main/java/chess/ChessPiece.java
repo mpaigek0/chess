@@ -101,21 +101,20 @@ public class ChessPiece {
     private void jumpSquares(ChessBoard board, ChessPosition myPosition, Collection<ChessMove> moves, int dRow, int dCol){
         int r = myPosition.getRow() + dRow; // gets current position and adds rol/col to see where trying to move
         int c = myPosition.getColumn() + dCol;
-        ChessPosition nextPos = new ChessPosition(r, c);
-        ChessPiece occupant = board.getPiece(nextPos);
-        if (occupant == null){
-            moves.add(new ChessMove(myPosition, nextPos, null));
 
-        }
-        else{
-            // if there's a piece at the spot and it's not your color, then it can be overtaken but no more sliding
-            if (occupant.getTeamColor() != getTeamColor()){
+        if (r >= 1 && r <= 8 && c >= 1 && c <= 8) {
+            ChessPosition nextPos = new ChessPosition(r, c);
+            ChessPiece occupant = board.getPiece(nextPos);
+            if (occupant == null) {
                 moves.add(new ChessMove(myPosition, nextPos, null));
+
+            } else {
+                // if there's a piece at the spot and it's not your color, then it can be overtaken but no more sliding
+                if (occupant.getTeamColor() != getTeamColor()) {
+                    moves.add(new ChessMove(myPosition, nextPos, null));
+                }
             }
         }
-        // check the next square in the same direction. Stop checking once a same color piece is there
-        r += dRow;
-        c += dCol;
     }
 
 
