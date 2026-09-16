@@ -67,12 +67,33 @@ public class ChessPiece {
      *
      * @return Collection of valid moves
      */
-    // check that the sliding moves for bishop, rook, & queen are valid
-    private Collection<ChessMove> slideSquares(ChessBoard board, ChessPosition myPosition, int[][] directions){
-        Collection<ChessMove> moves = new ArrayList<>();
-        ChessGame.TeamColor piece_clr = getTeamColor();
-        return moves; // not correct rn
 
+    // check that the sliding moves for bishop, rook, & queen are valid
+    private void slideSquares(ChessBoard board, ChessPosition myPosition, Collection<ChessMove> moves, int dRow, int dCol){
+        int r = myPosition.getRow() + dRow; // gets current position and adds rol/col to see where trying to move
+        int c = myPosition.getColumn() + dCol;
+
+        // iterate over the board, make sure it stays within bounds
+        while (r >= 1 && r <= 8 && c >= 1 && c <= 8){
+            ChessPosition nextPos = new ChessPosition(r, c);
+            ChessPiece occupant = board.getPiece(nextPos);
+
+            // nothing is on the estimated square so check next move
+            if (occupant == null){
+                moves.add(new ChessMove(myPosition, nextPos, null));
+
+            }
+            else{
+                // if there's a piece at the spot and it's not your piece, then stop sliding
+                if (occupant.getTeamColor() != getTeamColor()){
+                    moves.add(new ChessMove(myPosition, nextPos, null));
+                }
+                break;
+            }
+            // check the next square in the same direction. Stop checking once a same color piece is there
+            r += dRow;
+            c += dCol;
+        }
 
     }
 
@@ -84,11 +105,13 @@ public class ChessPiece {
         PieceType type = getPieceType();
 
         // find out the piece's type and it's possible moves
-        if (type == PieceType.BISHOP){
+        if (type == PieceType.BISHOP) {
             // bishop can move in the 4 diagonals from where he currently is.
-            int[][] bishop_directs = {{1,1}, {1, -1}, {-1,1}, {-1,-1}};
-            // make a loop for checking if the spot is off the board, if there's already another piece there
-            // (if it's one of your own pieces, you can't get there. If it's other team then you can capture it)
+            //bishop_directs = {{1,1}, {1, -1}, {-1,1}, {-1,-1}};
+            slideSquares(board, myPosition, moves, 1, 1);
+            slideSquares(board, myPosition, moves, 1, -1);
+            slideSquares(board, myPosition, moves, -1, 1);
+            slideSquares(board, myPosition, moves, -1, -1);
         }
         else if (type == PieceType.ROOK){
             // rook can move up, down, left, or right. (row,col)
