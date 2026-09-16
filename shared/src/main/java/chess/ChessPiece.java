@@ -115,13 +115,26 @@ public class ChessPiece {
         }
         else if (type == PieceType.ROOK){
             // rook can move up, down, left, or right. (row,col)
-            int[][] rook_directs = {{1,0}, {-1, 0}, {0,-1}, {0,1}};
+            // rook_directs = {{1,0}, {-1, 0}, {0,-1}, {0,1}};
+            slideSquares(board, myPosition, moves, 1, 0);
+            slideSquares(board, myPosition, moves, -1, 0);
+            slideSquares(board, myPosition, moves, 0, 1);
+            slideSquares(board, myPosition, moves, 0, -1);
 
         }
 
         else if (type == PieceType.QUEEN){
             // queen moves in a combination of what rook and bishop do
-            int[][] queen_directs = {{1,1}, {1, -1}, {-1,1}, {-1,-1}, {1,0}, {-1, 0}, {0,-1}, {0,1}};
+            // queen_directs = {{1,1}, {1, -1}, {-1,1}, {-1,-1}, {1,0}, {-1, 0}, {0,-1}, {0,1}};
+            slideSquares(board, myPosition, moves, 1, 0);
+            slideSquares(board, myPosition, moves, -1, 0);
+            slideSquares(board, myPosition, moves, 0, 1);
+            slideSquares(board, myPosition, moves, 0, -1);
+            slideSquares(board, myPosition, moves, 1, 1);
+            slideSquares(board, myPosition, moves, 1, -1);
+            slideSquares(board, myPosition, moves, -1, 1);
+            slideSquares(board, myPosition, moves, -1, -1);
+
 
         }
         else if (type == PieceType.KNIGHT){
