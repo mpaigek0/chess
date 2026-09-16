@@ -97,7 +97,7 @@ public class ChessPiece {
 
     }
 
-    // helper function for at least the knight and king
+    // helper function for at least the knight and king. these pieces can't continually move in a direction so no while loop
     private void jumpSquares(ChessBoard board, ChessPosition myPosition, Collection<ChessMove> moves, int dRow, int dCol){
         int r = myPosition.getRow() + dRow; // gets current position and adds rol/col to see where trying to move
         int c = myPosition.getColumn() + dCol;
@@ -188,6 +188,14 @@ public class ChessPiece {
         }
 
         else if (type == PieceType.PAWN){
+            // pawns can only move forward, not backwards sideways or diagonally when advancing
+            // initial two-square jump: on a pawn's first move from it's starting rank, it has the option to advance 1 or 2
+            // after a pawn has left its starting square, it may only move one square forward per turn
+            // if a piece sits directly in front of a pawn, the pawn is blocked
+            // capturing: diagonal capture: pawns capture one square diagonally forward to the left or right
+            // ** en passant is extra credit ** ** so is castling **
+            // promotion: if a pawn reaches the opposite side of the board (the 8th rank for white, the 1st rank
+            // for black), it transforms into a queen, rook, bishop, or knight
 
         }
         return moves; // return the moves available for the piece to take
