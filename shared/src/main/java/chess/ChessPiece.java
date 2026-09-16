@@ -174,8 +174,19 @@ public class ChessPiece {
             }
 
         else if (type == PieceType.KING){
+            // king can move ONE spot any adjacent direction. r, c
+            // king directions = {1, 0}, {1,1}, {1,-1}, {0, -1}, {0, 1}, {-1, -1}, {-1, 0} {-1, 1}
+            jumpSquares(board, myPosition, moves, 1,0);
+            jumpSquares(board, myPosition, moves, 1,1);
+            jumpSquares(board, myPosition, moves, 1,-1);
+            jumpSquares(board, myPosition, moves, 0,-1);
+            jumpSquares(board, myPosition, moves, 0,1);
+            jumpSquares(board, myPosition, moves, -1,-1);
+            jumpSquares(board, myPosition, moves, -1,0);
+            jumpSquares(board, myPosition, moves, -1,1);
 
         }
+
         else if (type == PieceType.PAWN){
 
         }
