@@ -132,14 +132,16 @@ public class ChessPiece {
                 if (occupant != null && occupant.getTeamColor() != getTeamColor()) {
                     if (Promotion) {
                         moves.add(new ChessMove(myPosition, nextPos, ChessPiece.PieceType.QUEEN));
-                        moves.add(new ChessMove(myPosition, nextPos, ChessPiece.PieceType.KING));
+                        moves.add(new ChessMove(myPosition, nextPos, ChessPiece.PieceType.ROOK));
                         moves.add(new ChessMove(myPosition, nextPos, ChessPiece.PieceType.KNIGHT));
                         moves.add(new ChessMove(myPosition, nextPos, ChessPiece.PieceType.BISHOP));
 
                     } else { // not promotion
                         moves.add(new ChessMove(myPosition, nextPos, null));
                     }
-                } else { // spot is empty --> capture not happening but maybe promotion
+                }
+
+                }else { // spot is empty --> capture not happening but maybe promotion
                     if (occupant == null) {
                         if (Promotion) {
                             moves.add(new ChessMove(myPosition, nextPos, ChessPiece.PieceType.QUEEN));
@@ -152,7 +154,7 @@ public class ChessPiece {
                         }
                     }
                 }
-            }
+
         }
     }
 
@@ -234,7 +236,28 @@ public class ChessPiece {
             // ** en passant is extra credit ** ** so is castling **
             // promotion: if a pawn reaches the opposite side of the board (the 8th rank for white, the 1st rank
             // for black), it transforms into a queen, rook, bishop, or knight
+            int direction = (getTeamColor() == ChessGame.TeamColor.WHITE) ? 1 : -1; // if you're a white piece, you start at the bottom and move up
+            int start_r = (getTeamColor() == ChessGame.TeamColor.WHITE) ? 2 : 7;
 
+            // normal forward move
+            pawnMoves(board, myPosition, moves, direction, 0, false);
+
+            // double starting move
+            if (myPosition.getRow() == start_r){
+                // check square in front:
+                int row_ahead = myPosition.getRow() + direction;
+                int curr_col = myPosition.getColumn();
+                ChessPosition square_ahead = new ChessPosition(row_ahead, curr_col);
+                // allow the double jump if nothing is there
+                if(board.getPiece(square_ahead) == null){
+                    pawnMoves(board, myPosition, moves, direction * 2, 0, false);
+                }
+
+            }
+
+            // capture moves
+            pawnMoves(board, myPosition, moves, direction, -1, true);
+            pawnMoves(board, myPosition, moves, direction, 1, true);
 
         }
         return moves; // return the moves available for the piece to take
