@@ -117,6 +117,44 @@ public class ChessPiece {
         }
     }
 
+    private void pawnMoves(ChessBoard board, ChessPosition myPosition, Collection<ChessMove> moves, int dRow, int dCol, boolean capture) {
+        int r = myPosition.getRow() + dRow; // gets current position and adds rol/col to see where trying to move
+        int c = myPosition.getColumn() + dCol;
+
+        if (r >= 1 && r <= 8 && c >= 1 && c <= 8) {
+            ChessPosition nextPos = new ChessPosition(r, c);
+            ChessPiece occupant = board.getPiece(nextPos);
+            // promotion will happen if white pieces are at top or black piece at bottom
+            boolean Promotion = (getTeamColor() == ChessGame.TeamColor.WHITE && r == 8) || (getTeamColor() == ChessGame.TeamColor.BLACK && r == 1);
+
+            // now to check the different types of moves
+            if (capture) { // capture move
+                if (occupant != null && occupant.getTeamColor() != getTeamColor()) {
+                    if (Promotion) {
+                        moves.add(new ChessMove(myPosition, nextPos, ChessPiece.PieceType.QUEEN));
+                        moves.add(new ChessMove(myPosition, nextPos, ChessPiece.PieceType.KING));
+                        moves.add(new ChessMove(myPosition, nextPos, ChessPiece.PieceType.KNIGHT));
+                        moves.add(new ChessMove(myPosition, nextPos, ChessPiece.PieceType.BISHOP));
+
+                    } else { // not promotion
+                        moves.add(new ChessMove(myPosition, nextPos, null));
+                    }
+                } else { // spot is empty --> capture not happening but maybe promotion
+                    if (occupant == null) {
+                        if (Promotion) {
+                            moves.add(new ChessMove(myPosition, nextPos, ChessPiece.PieceType.QUEEN));
+                            moves.add(new ChessMove(myPosition, nextPos, ChessPiece.PieceType.ROOK));
+                            moves.add(new ChessMove(myPosition, nextPos, ChessPiece.PieceType.KNIGHT));
+                            moves.add(new ChessMove(myPosition, nextPos, ChessPiece.PieceType.BISHOP));
+
+                        } else { // not promotion
+                            moves.add(new ChessMove(myPosition, nextPos, null));
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     // FUNCTION OUTLINE GIVEN TO US:
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
@@ -196,6 +234,7 @@ public class ChessPiece {
             // ** en passant is extra credit ** ** so is castling **
             // promotion: if a pawn reaches the opposite side of the board (the 8th rank for white, the 1st rank
             // for black), it transforms into a queen, rook, bishop, or knight
+
 
         }
         return moves; // return the moves available for the piece to take
