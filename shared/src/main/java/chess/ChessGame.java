@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -10,8 +11,10 @@ import java.util.Collection;
  */
 public class ChessGame {
 private ChessGame.TeamColor color;
+private ChessBoard board;
     public ChessGame() {
-
+        this.board = new ChessBoard();
+        this.color = TeamColor.WHITE;
     }
 
     /**
@@ -46,8 +49,30 @@ private ChessGame.TeamColor color;
      * startPosition
      */
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
+        ChessPiece piece = board.getPiece(startPosition);
+
+        if(piece == null){
+            return null;
+        }
+
+        Collection<ChessMove> potentialMoves = piece.pieceMoves(board, startPosition);
+        Collection<ChessMove> validMoveList = new ArrayList<>();
+
+        for(ChessMove move : potentialMoves){
+            if(checkSafety(move, piece.getTeamColor())){
+                validMoveList.add(move);
+            }
+        }
+        return validMoveList;
     }
+
+
+
+    private boolean checkSafety(ChessMove move, TeamColor teamColor) {
+
+    }
+
+
 
     /**
      * Makes a move in the chess game
@@ -96,7 +121,7 @@ private ChessGame.TeamColor color;
      * @param board the new board to use
      */
     public void setBoard(ChessBoard board) {
-        throw new RuntimeException("Not implemented");
+        this.board = board;
     }
 
     /**
@@ -105,6 +130,6 @@ private ChessGame.TeamColor color;
      * @return the chessboard
      */
     public ChessBoard getBoard() {
-        throw new RuntimeException("Not implemented");
+        return this.board;
     }
 }
