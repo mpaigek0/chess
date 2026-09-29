@@ -158,6 +158,7 @@ public class ChessPiece {
         }
     }
 
+
     // FUNCTION OUTLINE GIVEN TO US:
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         Collection<ChessMove> moves = new ArrayList<>(); // make an array list to fill with each piece's possible moves
@@ -166,7 +167,7 @@ public class ChessPiece {
         // find out the piece's type and it's possible moves
         if (type == PieceType.BISHOP) {
             // bishop can move in the 4 diagonals from where he currently is.
-            //bishop_directs = {{1,1}, {1, -1}, {-1,1}, {-1,-1}};
+            //bishop_directs = {{1,1}, {1, -1}, {-1,1}, {-1,-1}}
             slideSquares(board, myPosition, moves, 1, 1);
             slideSquares(board, myPosition, moves, 1, -1);
             slideSquares(board, myPosition, moves, -1, 1);
