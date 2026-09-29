@@ -48,6 +48,11 @@ private ChessBoard board;
      * @return Set of valid moves for requested piece, or null if no piece at
      * startPosition
      */
+
+    // takes as input a position on the chessboard & returns all moves the piece there
+    // can legally make. If there is no piece at that location, return null. A move is valid
+    // if it is a "piece move" for the piece at the input location and doesn't leave king in danger
+    // of check
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         ChessPiece piece = board.getPiece(startPosition);
 
@@ -67,11 +72,24 @@ private ChessBoard board;
     }
 
 
-
+    // checks for the kings safety while going through the list of potential moves
     private boolean checkSafety(ChessMove move, TeamColor teamColor) {
+        ChessPosition start = move.getStartPosition(); // gets the piece your trying to move's starting location
+        ChessPosition end = move.getEndPosition(); // and where you're trying to move it
 
+        ChessPiece movingPiece = board.getPiece(start); // gets the piece type of your piece
+        ChessPiece goalPiece = board.getPiece(end); //and of the piece where you might move
+
+        board.addPiece(end, movingPiece); // moves your piece & leaves its starter square empty
+        board.addPiece(start, null);
+
+        boolean safeStatus = !isInCheck(teamColor); // after its 'moved', checks if that would cause issues
+
+        board.addPiece(start, movingPiece); // reset the board to how it was
+        board.addPiece(end, goalPiece);
+
+        return safeStatus;
     }
-
 
 
     /**
@@ -90,6 +108,7 @@ private ChessBoard board;
      * @param teamColor which team to check for check
      * @return True if the specified team is in check
      */
+    // you are in check when an opponents piece directly attacks your king
     public boolean isInCheck(TeamColor teamColor) {
         throw new RuntimeException("Not implemented");
     }
@@ -100,6 +119,9 @@ private ChessBoard board;
      * @param teamColor which team to check for checkmate
      * @return True if the specified team is in checkmate
      */
+
+    // using the teamcolor find the location of the team's king. Then, go through all the possible moves of the other
+    // team's pieces, and if any of those potential moves equal the kings possible, then return true!
     public boolean isInCheckmate(TeamColor teamColor) {
         throw new RuntimeException("Not implemented");
     }
