@@ -2,6 +2,7 @@ package chess;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
 
 /**
  * A class that can manage a chess game, making moves on a board
@@ -15,6 +16,20 @@ private ChessBoard board;
     public ChessGame() {
         this.board = new ChessBoard();
         this.color = TeamColor.WHITE;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ChessGame chessGame = (ChessGame) o;
+        return color == chessGame.color && Objects.equals(getBoard(), chessGame.getBoard());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(color, getBoard());
     }
 
     /**
@@ -99,7 +114,7 @@ private ChessBoard board;
      * @throws InvalidMoveException if move is invalid
      */
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        throw new RuntimeException("Not implemented");
+        // not implemented;
     }
 
     /**
@@ -108,9 +123,45 @@ private ChessBoard board;
      * @param teamColor which team to check for check
      * @return True if the specified team is in check
      */
-    // you are in check when an opponents piece directly attacks your king
+
+
+    // using the teamcolor find the location of the team's king. Then, go through all the possible moves of the other
+    // team's pieces, and if any of those potential moves equal the kings possible, then return true!
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        ChessPosition kingPosition = null;
+
+        for(int r = 1; r <= 8; r++){ // iterate through every position on the board to find the king!
+            for(int c = 1; c <= 8; c++){
+                ChessPosition checkSpot = new ChessPosition(r,c);
+                ChessPiece piece = board.getPiece(checkSpot);
+
+                // find the king
+                if(piece != null && piece.getTeamColor() == teamColor && piece.getPieceType() == ChessPiece.PieceType.KING){
+                    kingPosition = checkSpot;
+                }
+            }
+        }
+
+        TeamColor enemyColor = (teamColor == TeamColor.BLACK)? TeamColor.WHITE : TeamColor.BLACK;
+        // then, need to iterate through opposite color's potential piece moves, and if movRow = kingRow && movCol = kingCol return true,
+        // else, return false.
+        for(int r = 1; r <=8; r++){
+            for(int c = 1; c <= 8; c++){
+                ChessPosition checkSpot = new ChessPosition(r,c);
+                ChessPiece piece = board.getPiece(checkSpot);
+
+                if(piece != null && piece.getTeamColor() == enemyColor){
+                    Collection <ChessMove> enemyMoves = piece.pieceMoves(board, checkSpot);
+
+                    for(ChessMove move : enemyMoves){
+                        if(move.getEndPosition().equals(kingPosition)){ // piece is going to move into kings spot!!
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -123,7 +174,7 @@ private ChessBoard board;
     // using the teamcolor find the location of the team's king. Then, go through all the possible moves of the other
     // team's pieces, and if any of those potential moves equal the kings possible, then return true!
     public boolean isInCheckmate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        return true;
     }
 
     /**
@@ -134,7 +185,7 @@ private ChessBoard board;
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        return true; //not correct!!
     }
 
     /**
