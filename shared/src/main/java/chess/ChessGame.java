@@ -113,6 +113,10 @@ private ChessBoard board;
      * @param move chess move to perform
      * @throws InvalidMoveException if move is invalid
      */
+
+    // make move should get the moves starting position and ending position, and make sure that
+    // the ending position is within the moves valid moves, and if it is, then it moves over
+    // and the starting position is replaced with a "null"
     public void makeMove(ChessMove move) throws InvalidMoveException {
         // not implemented;
     }
@@ -171,8 +175,6 @@ private ChessBoard board;
      * @return True if the specified team is in checkmate
      */
 
-    // using the teamcolor find the location of the team's king. Then, go through all the possible moves of the other
-    // team's pieces, and if any of those potential moves equal the kings possible, then return true!
     public boolean isInCheckmate(TeamColor teamColor) {
         return true;
     }
