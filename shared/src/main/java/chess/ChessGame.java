@@ -15,6 +15,7 @@ private ChessGame.TeamColor color;
 private ChessBoard board;
     public ChessGame() {
         this.board = new ChessBoard();
+        this.board.resetBoard();
         this.color = TeamColor.WHITE;
     }
 
@@ -195,6 +196,8 @@ private ChessBoard board;
         return false;
     }
 
+
+
     /**
      * Determines if the given team is in checkmate
      *
@@ -202,8 +205,40 @@ private ChessBoard board;
      * @return True if the specified team is in checkmate
      */
 
+    // checks every piece on the board and if any board has a valid move.
+    // remember validmoves checks if the king is in check! so these moves will help
+    // get us out of check and avoid checkmate
+    private boolean boardHasValidMoves(TeamColor teamColor){
+        for(int r = 1; r <=8; r++){
+            for(int c = 1; c <= 8; c++){
+                ChessPosition checkSpot = new ChessPosition(r,c);
+                ChessPiece piece = board.getPiece(checkSpot);
+
+                if (piece != null && piece.getTeamColor() == teamColor){
+                    Collection<ChessMove> moves = validMoves(checkSpot);
+
+                    if(moves != null && !moves.isEmpty()){
+                        return true;
+                    }
+                }
+            }
+        }
+return false;
+    }
+
+    // checkmate happens when the king is in check and can't escape
+    // three things must be true: 1. the king is in check.
+    // 2. any square the king could move to is
+    // controlled or blocked by an enemy piece or friendly piece.
+    // 3. the player has no valid moves to capture the attacking piece or block the attack
+    // validmoves() already filters out any moves that leave the king in check
     public boolean isInCheckmate(TeamColor teamColor) {
-        return true;
+        if (isInCheck(teamColor)){
+            if (!boardHasValidMoves(teamColor)){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
