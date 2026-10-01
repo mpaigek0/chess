@@ -118,7 +118,34 @@ private ChessBoard board;
     // the ending position is within the moves valid moves, and if it is, then it moves over
     // and the starting position is replaced with a "null"
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        // not implemented;
+        ChessPosition origin = move.getStartPosition();
+        ChessPosition goal = move.getEndPosition();
+        ChessPiece movingPiece = board.getPiece(origin);
+
+        if (movingPiece == null){
+            throw new InvalidMoveException("There is no piece to move");
+        }
+
+        if (movingPiece.getTeamColor() != getTeamTurn()){
+            throw new InvalidMoveException("It's not your turn!");
+        }
+
+
+        Collection <ChessMove> validMoveList = validMoves(origin);
+        if(validMoveList == null || !validMoveList.contains(move)){
+            throw new InvalidMoveException("That move isn't allowed");
+        }
+
+        ChessPiece placingPiece = movingPiece;
+        if(move.getPromotionPiece() != null){
+            placingPiece = new ChessPiece(movingPiece.getTeamColor(), move.getPromotionPiece());
+        }
+
+        board.addPiece(goal, placingPiece);
+        board.addPiece(origin, null);
+
+        TeamColor nextTeam = (getTeamTurn() == TeamColor.WHITE)? TeamColor.BLACK : TeamColor.WHITE;
+        setTeamTurn(nextTeam);
     }
 
     /**
