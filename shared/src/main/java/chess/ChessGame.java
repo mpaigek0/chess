@@ -249,7 +249,12 @@ return false;
      * @return True if the specified team is in stalemate, otherwise false
      */
     public boolean isInStalemate(TeamColor teamColor) {
-        return true; //not correct!!
+        if (!isInCheck(teamColor)){
+            if (!boardHasValidMoves(teamColor)){
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
