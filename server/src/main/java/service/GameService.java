@@ -21,7 +21,8 @@ public class GameService {
         return new ListGamesResult(games);
     }
 
-    public CreateGameResult createGame(String authToken, CreateGameRequest req) throws DataAccessException, UnauthorizedException, BadRequestException{
+    public CreateGameResult createGame(String authToken, CreateGameRequest req)
+            throws DataAccessException, UnauthorizedException, BadRequestException{
         verifyAuth(authToken);
         if(req.gameName() == null || req.gameName().isEmpty()){
             throw new BadRequestException("Error: bad request");
@@ -30,7 +31,8 @@ public class GameService {
         return new CreateGameResult(gameID);
     }
 
-    public void joinGame(String authToken, JoinGameRequest req) throws DataAccessException, UnauthorizedException, BadRequestException, AlreadyTakenException{
+    public void joinGame(String authToken, JoinGameRequest req)
+            throws DataAccessException, UnauthorizedException, BadRequestException, AlreadyTakenException{
         AuthData auth = verifyAuth(authToken);
         if (req == null || req.gameID() <= 0){
             throw new BadRequestException("Error: bad request");
