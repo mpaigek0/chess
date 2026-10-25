@@ -31,8 +31,13 @@ public class GameServiceTest {
         authDAO.clear();
         gameDAO.clear();
 
-        userService.register(new RegisterRequest("testUser", "password123", "test@byu.edu"));
-        LoginResult loginResult = userService.login(new LoginRequest("testUser", "password123"));
+        userService.register(new RegisterRequest(
+                "testUser",
+                "password123",
+                "test@byu.edu"));
+        LoginResult loginResult = userService.login(new LoginRequest(
+                "testUser",
+                "password123"));
         authToken = loginResult.authToken();
     }
 
@@ -70,7 +75,7 @@ public class GameServiceTest {
 
     @Test
     void createGameBadRequest() {
-        CreateGameRequest req = new CreateGameRequest(""); // Empty name should trigger bad request
+        CreateGameRequest req = new CreateGameRequest("");
         assertThrows(BadRequestException.class, () -> {
             gameService.createGame(authToken, req);
         });
@@ -98,8 +103,13 @@ public class GameServiceTest {
         gameService.joinGame(authToken, reqWhite);
 
         // 2nd user joins in
-        userService.register(new RegisterRequest("secondUser", "pass456", "second@byu.edu"));
-        LoginResult secondLogin = userService.login(new LoginRequest("secondUser", "pass456"));
+        userService.register(new RegisterRequest(
+                "secondUser",
+                "pass456",
+                "second@byu.edu"));
+        LoginResult secondLogin = userService.login(new LoginRequest(
+                "secondUser",
+                "pass456"));
 
         // 2nd user also tries to take white
         assertThrows(AlreadyTakenException.class, () -> {
