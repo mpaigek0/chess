@@ -11,9 +11,9 @@ public class Server {
     private final Javalin javalin;
 
     // initialize the DAOs and services for the game
-    private final UserDAO userDAO = new MemoryUserDAO();
-    private final AuthDAO authDAO = new MemoryAuthDAO();
-    private final GameDAO gameDAO = new MemoryGameDAO();
+    private final UserDAO userDAO = new SqlUserDAO(); // these change from memory to SQL for phase 4
+    private final AuthDAO authDAO = new SqlAuthDAO();
+    private final GameDAO gameDAO = new SqlGameDAO();
 
     private final UserService userService = new UserService(userDAO, authDAO);
     private final GameService gameService = new GameService(gameDAO, authDAO);
@@ -131,6 +131,12 @@ public class Server {
     }
 
     public int run(int desiredPort) {
+        try{
+            DatabaseManager.configureDataBase();
+        } catch (DataAccessException e){
+            System.err.println("Can't start database");
+        }
+
         javalin.start(desiredPort);
         return javalin.port();
     }
