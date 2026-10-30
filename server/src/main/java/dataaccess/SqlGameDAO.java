@@ -103,6 +103,21 @@ public class SqlGameDAO implements GameDAO {
         }
     }
 
+    @Override
+    private  GameData readGameData(java.sql.ResultSet rs) throws SQLException{
+        int gameID = rs.getInt("gameID");
+        String whiteUsername = rs.getString("whiteUsername");
+        String blackUsername = rs.getString("blackUsername");
+        String gameName = rs.getString("gameName");
+        String jsonGame = rs.getString("game");
+
+        ChessGame chessGame = new Gson().fromJson(jsonGame, ChessGame.class);
+        return new GameData(gameID, whiteUsername, blackUsername, gameName, chessGame);
+    }
+
+    }
+
+
 
 
 
