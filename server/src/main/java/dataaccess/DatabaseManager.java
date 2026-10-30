@@ -74,4 +74,47 @@ public class DatabaseManager {
         var port = Integer.parseInt(props.getProperty("db.port"));
         connectionUrl = String.format("jdbc:mysql://%s:%d", host, port);
     }
+
+    // adding for phase 4:
+    public static void configureDatabase() throws DataAccessException {
+        createDatabase();
+
+        String[] createStatements = {
+                """
+        CREATE TABLE IF NOT EXISTS user (
+            username VARCHAR(255) NOT NULL,
+            password VARCHAR(255) NOT NULL,
+            email VARCHAR(255),
+            PRIMARY KEY (username)
+        )
+        """,
+                """
+        CREATE TABLE IF NOT EXISTS auth (
+            authToken VARCHAR(255) NOT NULL,
+            username VARCHAR(255) NOT NULL,
+            PRIMARY KEY (authToken)
+        )
+        """,
+                """
+        CREATE TABLE IF NOT EXISTS game (
+            gameID INT NOT NULL AUTO_INCREMENT,
+            whiteUsername VARCHAR(255),
+            blackUsername VARCHAR(255),
+            gameName VARCHAR(255) NOT NULL,
+            game TEXT NOT NULL,
+            PRIMARY KEY (gameID)
+        )
+        """
+        };
+
+        try (var conn = getConnection()) {
+            for (var statement : createStatements) {
+                try (var preparedStatement = conn.prepareStatement(statement)) {
+                    preparedStatement.executeUpdate();
+                }
+            }
+        } catch (SQLException e) {
+            throw new DataAccessException("Failed to configure database tables");
+        }
+    }
 }

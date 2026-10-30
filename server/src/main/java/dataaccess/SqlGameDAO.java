@@ -103,7 +103,6 @@ public class SqlGameDAO implements GameDAO {
         }
     }
 
-    @Override
     private  GameData readGameData(java.sql.ResultSet rs) throws SQLException{
         int gameID = rs.getInt("gameID");
         String whiteUsername = rs.getString("whiteUsername");

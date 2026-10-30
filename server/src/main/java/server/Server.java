@@ -132,7 +132,7 @@ public class Server {
 
     public int run(int desiredPort) {
         try{
-            DatabaseManager.configureDataBase();
+            DatabaseManager.configureDatabase();
         } catch (DataAccessException e){
             System.err.println("Can't start database");
         }
