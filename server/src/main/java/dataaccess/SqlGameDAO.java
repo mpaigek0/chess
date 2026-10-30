@@ -91,6 +91,18 @@ public class SqlGameDAO implements GameDAO {
         }
     }
 
+    @Override
+    public void clear() throws DataAccessException{
+        var statement = "DELETE FROM game";
+        try(var conn = DatabaseManager.getConnection();
+            var ps = conn.prepareStatement(statement)){
+            ps.executeUpdate();
+        }
+        catch (SQLException e){
+            throw new DataAccessException("Failed to clear game");
+        }
+    }
+
 
 
 
