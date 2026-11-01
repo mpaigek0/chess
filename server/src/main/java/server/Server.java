@@ -131,10 +131,10 @@ public class Server {
     }
 
     public int run(int desiredPort) {
-        try{
+        try {
             DatabaseManager.configureDatabase();
-        } catch (DataAccessException e){
-            System.err.println("Can't start database");
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Can't start database", e);
         }
 
         javalin.start(desiredPort);
