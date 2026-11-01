@@ -1,7 +1,10 @@
-package dataaccess;
+package dataaccess.sql;
 
 import chess.ChessGame;
 import com.google.gson.Gson;
+import dataaccess.DataAccessException;
+import dataaccess.DatabaseManager;
+import dataaccess.GameDAO;
 import model.GameData;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -11,7 +14,7 @@ import java.util.Collection;
 public class SqlGameDAO implements GameDAO {
 
     @Override
-    public int createGame(String gameName) throws DataAccessException{
+    public int createGame(String gameName) throws DataAccessException {
         ChessGame newGame = new ChessGame();
         newGame.getBoard().resetBoard();
         String jsonGame = new Gson().toJson(newGame);

@@ -1,13 +1,17 @@
-package dataaccess;
+package dataaccess.sql;
 
+import dataaccess.AuthDAO;
+import dataaccess.DataAccessException;
+import dataaccess.DatabaseManager;
 import model.AuthData;
 import java.sql.SQLException;
 import java.util.UUID;
 
-public class SqlAuthDAO implements AuthDAO{
+
+public class SqlAuthDAO implements AuthDAO {
 
     @Override
-    public AuthData createAuth(String username) throws DataAccessException{
+    public AuthData createAuth(String username) throws DataAccessException {
         String authToken = UUID.randomUUID().toString();
         AuthData authData = new AuthData(authToken, username);
 

@@ -1,5 +1,8 @@
 package server;
 
+import dataaccess.sql.SqlAuthDAO;
+import dataaccess.sql.SqlGameDAO;
+import dataaccess.sql.SqlUserDAO;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import com.google.gson.Gson;
