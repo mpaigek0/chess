@@ -27,13 +27,13 @@ public class GameDAOTest {
         GameData game = gameDAO.getGame(gameID);
         assertNotNull(game, "Game should be found in the database");
         assertEquals("epicTestingChessGame!", game.gameName());
-        assertNotNull(game.game(), "ChessGame object should be deserialized from JSON");
+        assertNotNull(game.game(), "ChessGame should be deserialized from JSON");
     }
 
     @Test
     public void getGameNotFound() throws DataAccessException {
         GameData game = gameDAO.getGame(99999);
-        assertNull(game, "Non-existent game ID should return null");
+        assertNull(game, "game not existing should be null");
     }
 
     @Test
