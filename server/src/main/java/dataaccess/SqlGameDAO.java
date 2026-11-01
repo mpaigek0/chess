@@ -31,7 +31,7 @@ public class SqlGameDAO implements GameDAO {
         } catch (SQLException e){
             throw new DataAccessException("Couldn't create game");
         }
-        throw new DataAccessException("Failed to get game from given ID")
+        throw new DataAccessException("Failed to get game from given ID");
     }
 
     @Override
@@ -120,4 +120,3 @@ public class SqlGameDAO implements GameDAO {
 
 
 
-}
