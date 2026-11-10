@@ -101,6 +101,20 @@ public class ChessClient{
         }
     }
 
+    private String register(String[] params){
+        if(params.length < 3){
+            return "Register expects: register <USERNAME> <PASSWORD> <EMAIL>";
+        }
+        try {
+            var userData = facade.register(params[0], params[1], params[2]);
+            authToken = userData.authToken();
+            state = State.SIGNED_IN;
+            return "Successfully logged in " + userData.username();
+        } catch(client.ResponseException e){
+            return "Failed to register: " + e.getMessage();
+        }
+    }
+
 
 
 
