@@ -78,5 +78,31 @@ public class ChessClient{
             };
         }
     }
+
+    private String showHelp(){
+        if (state == State.SIGNED_OUT){
+            return """
+                    - register <USERNAME> <PASSWORD> <EMAIL>
+                    - login <USERNAME> <PASSWORD>
+                    - quit
+                    - help
+                    """;
+        }
+        else{
+            return """
+                    - create <NAME>
+                    - list
+                    - join <ID> [WHITE|BLACK]
+                    - observe <ID>
+                    - logout
+                    - quit
+                    - help
+                    """;
+        }
+    }
+
+
+
+
 }
 
