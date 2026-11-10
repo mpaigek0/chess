@@ -101,6 +101,7 @@ public class ChessClient{
         }
     }
 
+
     private String register(String[] params){
         if(params.length < 3){
             return "Register expects: register <USERNAME> <PASSWORD> <EMAIL>";
@@ -109,9 +110,36 @@ public class ChessClient{
             var userData = facade.register(params[0], params[1], params[2]);
             authToken = userData.authToken();
             state = State.SIGNED_IN;
-            return "Successfully logged in " + userData.username();
+            return "Successfully registered in as " + userData.username();
         } catch(client.ResponseException e){
             return "Failed to register: " + e.getMessage();
+        }
+    }
+
+
+    private String login(String[] params){
+        if(params.length <2){
+            return "Login expects: login <USERNAME> <PASSWORD>";
+        }
+        try {
+            var userData = facade.login(params[0], params[1]);
+            authToken = userData.authToken();
+            state = State.SIGNED_IN;
+            return "Successfully logged in as " + userData.username();
+        } catch(client.ResponseException e){
+            return "Failed to login: " + e.getMessage();
+        }
+    }
+
+    private String logout(){
+        try{
+            facade.logout(authToken);
+            authToken = null;
+            state = State.SIGNED_OUT;
+            gameMap.clear();
+            return "Logged out successfully";
+        } catch (client.ResponseException e){
+            return "Failed to logout: " + e.getMessage();
         }
     }
 
