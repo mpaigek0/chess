@@ -1,5 +1,6 @@
 package client;
 
+
 import chess.*;
 
 public class ClientMain {
