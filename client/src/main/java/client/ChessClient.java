@@ -143,6 +143,21 @@ public class ChessClient{
         }
     }
 
+    private String createGame(String[] params){
+        if (params.length < 1){
+            return "Expected: create <NAME>";
+        }
+        try {
+            facade.createGame(params[0], authToken);
+            return "Game" + params[0] + " created successfully!";
+        } catch (client.ResponseException e){
+            return "Couldn't create game: " + e.getMessage();
+        }
+    }
+
+    private String listGames(){
+
+    }
 
 
 
