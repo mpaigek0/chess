@@ -1,7 +1,6 @@
 
 package client;
 
-import exception.ResponseException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -69,12 +68,14 @@ public class ChessClient{
             };
         } else{
             return switch (cmd){
+                case "quit" -> "quit";
                 case "logout" -> logout(); // logs out the user via the server api and transitions client back to prelogin UI
                 case "create" -> createGame(params); // prompts the user for a game name and calls the server create API. This creates the game on the server but doesn't auto join
                 case "list" -> listGames(); // lists all existing games on the server, in a numbered list w/ game name & current players
-                case "play" -> playGame(params); // allows the user to join a game by specifying the list number & their desired color
+                case "join" -> joinGame(params); // allows the user to join a game by specifying the list number & their desired color
                 case "observe" -> observeGame(params); // allows the user to specify a game to observe using the list number
                 default -> "Unrecognized command. Type 'help' to see valid commands";
+
             };
         }
     }
@@ -149,7 +150,7 @@ public class ChessClient{
         }
         try {
             facade.createGame(params[0], authToken);
-            return "Game" + params[0] + " created successfully!";
+            return "Game " + params[0] + " created successfully!";
         } catch (client.ResponseException e){
             return "Couldn't create game: " + e.getMessage() + "\n";
         }
@@ -181,13 +182,16 @@ public class ChessClient{
         }
     }
 
-    private String playGame(String[] params){
+    private String joinGame(String[] params){
         if (params.length <2){
-            return "Expected: play <GameID> <WHITE|BLACK>";
+            return "Expected: join <GameID> <WHITE|BLACK>";
         }
         try{
             int gameIndex = Integer.parseInt(params[0]);
             String color = params[1].toUpperCase();
+            if(!color.equals("WHITE") && !color.equals("BLACK")){
+                return "Invalid color! Expecting white or black";
+            }
 
             if(!gameMap.containsKey(gameIndex)){
                 return "That game doesn't exist";
@@ -195,11 +199,32 @@ public class ChessClient{
 
             var gameData = gameMap.get(gameIndex);
             facade.joinGame(color, gameData.gameID(), authToken);
-            return "Successfully joined game " + gameData.gameName() + "as the" + color + "player!\n";
+            return "Successfully joined game " + gameData.gameName() + " as the " + color + " player!\n";
         } catch (NumberFormatException e){
             return "Game number isn't a valid number";
         } catch (client.ResponseException e){
             return "Couldn't join game " + e.getMessage() + "\n";
+        }
+    }
+
+    private String observeGame(String[] params){
+        if(params.length < 1){
+            return "Expected: observe <gameNumber>\n";
+        }
+        try{
+            int gameIndex = Integer.parseInt(params[0]);
+
+            if(!gameMap.containsKey(gameIndex)){
+                return "That game number doesn't exist!";
+            }
+
+            var gameData = gameMap.get(gameIndex);
+            facade.joinGame(null, gameData.gameID(), authToken);
+            return "You're now observing game " + gameData.gameName() + "\n";
+        } catch (NumberFormatException e){
+            return "Game number isn't a valid number";
+        } catch (client.ResponseException e){
+            return "Couldn't observe game: " + e.getMessage() + "\n";
         }
     }
 
