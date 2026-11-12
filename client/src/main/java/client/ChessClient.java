@@ -181,6 +181,28 @@ public class ChessClient{
         }
     }
 
+    private String playGame(String[] params){
+        if (params.length <2){
+            return "Expected: play <GameID> <WHITE|BLACK>";
+        }
+        try{
+            int gameIndex = Integer.parseInt(params[0]);
+            String color = params[1].toUpperCase();
+
+            if(!gameMap.containsKey(gameIndex)){
+                return "That game doesn't exist";
+            }
+
+            var gameData = gameMap.get(gameIndex);
+            facade.joinGame(color, gameData.gameID(), authToken);
+            return "Successfully joined game " + gameData.gameName() + "as the" + color + "player!\n";
+        } catch (NumberFormatException e){
+            return "Game number isn't a valid number";
+        } catch (client.ResponseException e){
+            return "Couldn't join game " + e.getMessage() + "\n";
+        }
+    }
+
 
 
 
