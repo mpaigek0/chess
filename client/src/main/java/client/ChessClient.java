@@ -151,13 +151,37 @@ public class ChessClient{
             facade.createGame(params[0], authToken);
             return "Game" + params[0] + " created successfully!";
         } catch (client.ResponseException e){
-            return "Couldn't create game: " + e.getMessage();
+            return "Couldn't create game: " + e.getMessage() + "\n";
         }
     }
 
     private String listGames(){
+        try{
+            var games = facade.listGames(authToken);
+            gameMap.clear();
 
+            if (games.length == 0){
+                return "there are no available games right now\n";
+            }
+
+            StringBuilder sb = new StringBuilder("Current Games:\n");
+            for (int i = 0; i < games.length; i++){
+                int displayIndex = i + 1;
+                gameMap.put(displayIndex, games[i]);
+
+                String white = games[i].whiteUsername() != null ? games[i].whiteUsername() : "[Missing]";
+                String black = games[i].blackUsername() != null ? games[i].blackUsername() : "[Missing]";
+
+                sb.append(String.format("%d. %s | White: %s | Black: %s\n",
+                        displayIndex, games[i].gameName(), white, black));
+            }
+            return sb.toString();
+        } catch (client.ResponseException e){
+            return "Couldn't list games: " + e.getMessage() + "\n";
+        }
     }
+
+
 
 
 
