@@ -103,6 +103,23 @@ public class ChessClient{
         }
     }
 
+    private String grandmaErrors(client.ResponseException e){
+        String msg = e.getMessage().toLowerCase();
+        if (msg.contains("401")){
+            return "That username or password is incorrect!";
+        }
+        else if (msg.contains("403")){
+            return "That username is already taken";
+        }
+        else if (msg.contains("404")){
+            return "That couldn't be found!";
+        }
+        else if (msg.contains("500")){
+            return "Our server had an error, try again later";
+        }
+        return e.getMessage();
+    }
+
 
     private String register(String[] params){
         if(params.length < 3){
