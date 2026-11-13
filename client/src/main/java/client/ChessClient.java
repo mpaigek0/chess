@@ -4,6 +4,7 @@ package client;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
+import ui.BoardRender;
 
 
 import chess.*;
@@ -199,6 +200,14 @@ public class ChessClient{
 
             var gameData = gameMap.get(gameIndex);
             facade.joinGame(color, gameData.gameID(), authToken);
+            // connecting to draw da board:
+            ChessBoard board = new ChessBoard();
+            board.resetBoard();
+            ChessGame.TeamColor teamColor = color.equals("WHITE") ?
+                    ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK;
+            BoardRender.drawBoard(board, teamColor);
+
+
             return "Successfully joined game " + gameData.gameName() + " as the " + color + " player!\n";
         } catch (NumberFormatException e){
             return "Game number isn't a valid number";
@@ -220,6 +229,13 @@ public class ChessClient{
 
             var gameData = gameMap.get(gameIndex);
             facade.joinGame(null, gameData.gameID(), authToken);
+
+            // draw the board they're looking at:
+            ChessBoard board = new ChessBoard();
+            board.resetBoard();
+            ChessGame.TeamColor teamColor = ChessGame.TeamColor.WHITE;
+            BoardRender.drawBoard(board, teamColor);
+
             return "You're now observing game " + gameData.gameName() + "\n";
         } catch (NumberFormatException e){
             return "Game number isn't a valid number";

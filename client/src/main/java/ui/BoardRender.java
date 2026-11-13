@@ -33,7 +33,7 @@ public class BoardRender {
         for (String colName : headers){
             System.out.print(" " + colName + " ");
         }
-        System.out.println("  " + RESET_BG_COLOR);
+        System.out.println("   " + RESET_BG_COLOR);
     }
 
     private static void printRow(ChessBoard board, int row, boolean whitePlayer){
