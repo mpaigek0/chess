@@ -117,36 +117,39 @@ public class ChessClient{
         else if (msg.contains("500")){
             return "Our server had an error, try again later";
         }
+        else if(msg.contains("400")){
+            return "That wasn;t a valid request, please try again";
+        }
         return e.getMessage();
     }
 
 
     private String register(String[] params){
         if(params.length < 3){
-            return "Register expects: register <USERNAME> <PASSWORD> <EMAIL>";
+            return "Register expects: register <USERNAME> <PASSWORD> <EMAIL>" + "\n";
         }
         try {
             var userData = facade.register(params[0], params[1], params[2]);
             authToken = userData.authToken();
             state = State.SIGNED_IN;
-            return "Successfully registered in as " + userData.username();
+            return "Successfully registered in as " + userData.username() + "\n";
         } catch(client.ResponseException e){
-            return "Failed to register: " + e.getMessage();
+            return "Failed to register: " + grandmaErrors(e) + "\n";
         }
     }
 
 
     private String login(String[] params){
         if(params.length <2){
-            return "Login expects: login <USERNAME> <PASSWORD>";
+            return "Login expects: login <USERNAME> <PASSWORD>" + "\n";
         }
         try {
             var userData = facade.login(params[0], params[1]);
             authToken = userData.authToken();
             state = State.SIGNED_IN;
-            return "Successfully logged in as " + userData.username();
+            return "Successfully logged in as " + userData.username() + "\n";
         } catch(client.ResponseException e){
-            return "Failed to login: " + e.getMessage();
+            return "Failed to login: " + grandmaErrors(e) + "\n";
         }
     }
 
@@ -156,21 +159,21 @@ public class ChessClient{
             authToken = null;
             state = State.SIGNED_OUT;
             gameMap.clear();
-            return "Logged out successfully";
+            return "Logged out successfully" + "\n";
         } catch (client.ResponseException e){
-            return "Failed to logout: " + e.getMessage();
+            return "Failed to logout: " + grandmaErrors(e) + "\n";
         }
     }
 
     private String createGame(String[] params){
         if (params.length < 1){
-            return "Expected: create <NAME>";
+            return "Expected: create <NAME>\n";
         }
         try {
             facade.createGame(params[0], authToken);
-            return "Game " + params[0] + " created successfully!";
+            return "Game " + params[0] + " created successfully!\n";
         } catch (client.ResponseException e){
-            return "Couldn't create game: " + e.getMessage() + "\n";
+            return "Couldn't create game: " + grandmaErrors(e) + "\n";
         }
     }
 
@@ -196,23 +199,23 @@ public class ChessClient{
             }
             return sb.toString();
         } catch (client.ResponseException e){
-            return "Couldn't list games: " + e.getMessage() + "\n";
+            return "Couldn't list games: " + grandmaErrors(e) + "\n";
         }
     }
 
     private String joinGame(String[] params){
         if (params.length <2){
-            return "Expected: join <GameID> <WHITE|BLACK>";
+            return "Expected: join <GameID> <WHITE|BLACK>\n";
         }
         try{
             int gameIndex = Integer.parseInt(params[0]);
             String color = params[1].toUpperCase();
             if(!color.equals("WHITE") && !color.equals("BLACK")){
-                return "Invalid color! Expecting white or black";
+                return "Invalid color! Expecting white or black\n";
             }
 
             if(!gameMap.containsKey(gameIndex)){
-                return "That game doesn't exist";
+                return "That game doesn't exist\n";
             }
 
             var gameData = gameMap.get(gameIndex);
@@ -227,9 +230,9 @@ public class ChessClient{
 
             return "Successfully joined game " + gameData.gameName() + " as the " + color + " player!\n";
         } catch (NumberFormatException e){
-            return "Game number isn't a valid number";
+            return "Game number isn't a valid number\n";
         } catch (client.ResponseException e){
-            return "Couldn't join game " + e.getMessage() + "\n";
+            return "Couldn't join game " + grandmaErrors(e) + "\n";
         }
     }
 
@@ -241,11 +244,10 @@ public class ChessClient{
             int gameIndex = Integer.parseInt(params[0]);
 
             if(!gameMap.containsKey(gameIndex)){
-                return "That game number doesn't exist!";
+                return "That game number doesn't exist!\n";
             }
 
             var gameData = gameMap.get(gameIndex);
-            facade.joinGame(null, gameData.gameID(), authToken);
 
             // draw the board they're looking at:
             ChessBoard board = new ChessBoard();
@@ -255,9 +257,7 @@ public class ChessClient{
 
             return "You're now observing game " + gameData.gameName() + "\n";
         } catch (NumberFormatException e){
-            return "Game number isn't a valid number";
-        } catch (client.ResponseException e){
-            return "Couldn't observe game: " + e.getMessage() + "\n";
+            return "Game number isn't a valid number\n";
         }
     }
 
