@@ -71,7 +71,7 @@ public class ChessClient{
             return switch (cmd){
                 case "quit" -> "quit";
                 case "logout" -> logout(); // logs out the user via the server api and transitions client back to prelogin UI
-                case "create" -> createGame(params); // prompts the user for a game name and calls the server create API. This creates the game on the server but doesn't auto join
+                case "create" -> createGame(params); // prompts the user for a game name and calls the server create API.
                 case "list" -> listGames(); // lists all existing games on the server, in a numbered list w/ game name & current players
                 case "join" -> joinGame(params); // allows the user to join a game by specifying the list number & their desired color
                 case "observe" -> observeGame(params); // allows the user to specify a game to observe using the list number
